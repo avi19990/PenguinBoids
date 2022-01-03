@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccb5bd4ef3e9bf24da4f9c8dd69b32b4, type: 3}
-  m_Name: DefaultConfiguration
+  m_Name: BoidBehaviorData
   m_EditorClassIdentifier: 
   maxFOV: 120
   maxAcceleration: 40
@@ -20,6 +20,9 @@ MonoBehaviour:
   alignmentRadius: 10
   alignmentPriority: 90
   separationRadius: 6
-  separationPriority: 90
-  avoidanceRadius: 40
+  separationPriority: 200
+  avoidanceRadius: 30
   avoidancePriority: 700
+  centerRadius: 40
+  centerPriority: 1000
+  wanderPriority: 90
