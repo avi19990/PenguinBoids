@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace Boids
         private Transform boidPrefab;
         [SerializeField]
         private Transform predatorPrefab;
+        [SerializeField] 
+        private Transform obstaclePrefab;
 
         [SerializeField]
         private float mapRadius;
@@ -25,6 +28,7 @@ namespace Boids
 
         private List<Boid> boids;
         private List<Boid> predators;
+        private List<GameObject> obstacles;
 
         private BoidSpatialHash spatialHash;
 
@@ -49,23 +53,12 @@ namespace Boids
                 predators.Add(new Boid(predatorTransform, new Vector3()));
             }
 
+            obstacles = FindObjectsOfType<GameObject>().Where(foundGameObject => foundGameObject.CompareTag(obstaclePrefab.tag)).ToList();
+
             spatialHash = new BoidSpatialHash();
             spatialHash.InitializeCells(10, mapRadius * 2);
 
             maxBehaviorRadius = Mathf.Max(config.alignmentRadius, config.avoidanceRadius, config.cohesionRadius, config.separationRadius);
-        }
-
-        public List<Boid> GetPredators(Boid boid, float radius)
-        {
-            List<Boid> closePredators = new List<Boid>();
-
-            foreach (Boid predator in predators)
-            {
-                if (Vector3.Distance(boid.transform.position, predator.transform.position) <= radius)
-                    closePredators.Add(predator);
-            }
-
-            return closePredators;
         }
 
         private void Update()
@@ -90,7 +83,7 @@ namespace Boids
                 Boid boid = boids[i];
 
                 List<NeighbourData> neighbours = spatialHash.GetNeighbours(boid, maxBehaviorRadius);
-                neighbours.Sort((NeighbourData first, NeighbourData second) => { return first.sqrDistance.CompareTo(second.sqrDistance); });
+                neighbours.Sort((NeighbourData first, NeighbourData second) => first.sqrDistance.CompareTo(second.sqrDistance));
 
                 Vector3 acceleration = Combined(boid, neighbours);
                 acceleration = Vector3.ClampMagnitude(acceleration, config.maxAcceleration);
@@ -110,6 +103,7 @@ namespace Boids
                    Alignment(boid, neighbours) * config.alignmentPriority + 
                    Separation(boid, neighbours) * config.separationPriority + 
                    Avoidance(boid) * config.avoidancePriority + 
+                   AvoidanceObstacle(boid) * config.avoidancePriority + 
                    Center(boid) * config.centerPriority;
         }
 
@@ -193,16 +187,53 @@ namespace Boids
         {
             Vector3 avoidVector = new Vector3();
             List<Boid> predators = GetPredators(boid, config.avoidanceRadius);
-
+            
             if (predators.Count == 0)
-                return avoidVector;
+                 return avoidVector;
 
             foreach (Boid predator in predators)
             {
                 avoidVector += RunAway(boid, predator.transform.position);
             }
+            
+            return avoidVector.normalized;
+        }
+        
+        private Vector3 AvoidanceObstacle(Boid boid)
+        {
+            Vector3 avoidVector = new Vector3();
+            List<GameObject> obstacles = GetClosesObstacles(boid, config.avoidanceRadius);
+            
+            obstacles.ForEach(obstacle => avoidVector += RunAway(boid, obstacle.transform.position));
 
             return avoidVector.normalized;
+        }
+
+        
+        public List<Boid> GetPredators(Boid boid, float radius)
+        {
+            List<Boid> closePredators = new List<Boid>();
+
+            foreach (Boid predator in predators)
+            {
+                if (Vector3.Distance(boid.transform.position, predator.transform.position) <= radius)
+                    closePredators.Add(predator);
+            }
+
+            return closePredators;
+        }
+
+        private List<GameObject> GetClosesObstacles(Boid boid, float avoidanceRadius)
+        {
+            return obstacles.Where(obstacle =>
+                IsBoidCloseEnough(boid, avoidanceRadius, obstacle.transform.position)).ToList();
+        }
+
+        private bool IsBoidCloseEnough(Boid boid, float avoidanceRadius, Vector3 anotherPosition)
+        {
+            anotherPosition.y = 0;
+            boid.transform.position = new Vector3(boid.transform.position.x, 0, boid.transform.position.z);
+            return Vector3.Distance(boid.transform.position, anotherPosition) <= avoidanceRadius;
         }
 
         private Vector3 Center(Boid boid)

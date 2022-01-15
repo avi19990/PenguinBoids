@@ -21,7 +21,7 @@ MonoBehaviour:
   alignmentPriority: 90
   separationRadius: 6
   separationPriority: 200
-  avoidanceRadius: 30
+  avoidanceRadius: 40
   avoidancePriority: 700
   centerRadius: 40
   centerPriority: 1000
