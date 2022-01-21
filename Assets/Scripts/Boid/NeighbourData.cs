@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Boids
 {
     public class NeighbourData
