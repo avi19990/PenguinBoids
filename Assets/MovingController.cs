@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
@@ -10,11 +7,14 @@ public class MovingController : MonoBehaviour
     [SerializeField] private float speed = 15;
     [SerializeField] private CinemachineVirtualCamera camera;
 
+    private Vector2 input;
+    private float mouseXInput;
+    private Vector3 movingDirection;
+
     private void Update()
     {
         GetInput();
         GetMouseInput();
-        RotatePlayer();
         MovePlayer();
     }
 
@@ -23,24 +23,18 @@ public class MovingController : MonoBehaviour
         mouseXInput = Input.GetAxis("Mouse X");
     }
 
-    private void RotatePlayer()
-    {
-        transform.Rotate(Vector3.up * mouseXInput);
-    }
 
     private void MovePlayer()
     {
-        transform.position += new Vector3(input.y, 0, input.x) * speed * Time.deltaTime;
+        var cameraForward = Vector3.ProjectOnPlane(camera.transform.forward, Vector3.up);
+        var cameraRight = Quaternion.Euler(0, 90, 0) * cameraForward;
+        transform.position += input.x * cameraRight + input.y * cameraForward;
     }
-
-    private Vector2 input;
-    private float mouseXInput;
-    private Vector3 movingDirection;
 
     private void GetInput()
     {
-        float xInput = Input.GetAxis("Horizontal");
-        float yInput = Input.GetAxis("Vertical");
+        var xInput = Input.GetAxis("Horizontal");
+        var yInput = Input.GetAxis("Vertical");
         input = new Vector2(xInput, yInput);
     }
 }

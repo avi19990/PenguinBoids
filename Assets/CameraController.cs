@@ -25,14 +25,14 @@ public class CameraController : MonoBehaviour
         SwitchCamera(true);
     }
 
+    private static bool HasInput()
+    {
+        return Input.GetKeyDown(KeyCode.R);
+    }
+
     private void DisableAllCameras()
     {
         cameras.ForEach(camera => camera.gameObject.SetActive(false));
-    }
-
-    private void GetReferences()
-    {
-        cameras = GetComponentsInChildren<CinemachineVirtualCamera>().ToList();
     }
 
     private void SwitchCamera(bool shouldEnable = false)
@@ -45,8 +45,8 @@ public class CameraController : MonoBehaviour
         currentIndex = (currentIndex + 1) % cameras.Count;
     }
 
-    private static bool HasInput()
+    private void GetReferences()
     {
-        return Input.GetKeyDown(KeyCode.R);
+        cameras = GetComponentsInChildren<CinemachineVirtualCamera>().ToList();
     }
 }

@@ -67,7 +67,7 @@ namespace Boids
             {
                 Boid predator = predators[i];
 
-                Vector3 acceleration = Wander(predator) * config.wanderPriority + Center(predator) * config.centerPriority;
+                Vector3 acceleration = CombinedPredator(predator);
                 acceleration = Vector3.ClampMagnitude(acceleration, config.maxAcceleration);
 
                 predator.velocity += acceleration * Time.deltaTime;
@@ -95,6 +95,13 @@ namespace Boids
             }
 
             spatialHash.ClearCells();
+        }
+        
+        private Vector3 CombinedPredator(Boid boid)
+        {
+            return Wander(boid) * config.wanderPriority 
+                   + Center(boid) * config.centerPriority 
+                   + AvoidanceObstacle(boid) * config.avoidancePriority;
         }
 
         private Vector3 Combined(Boid boid, List<NeighbourData> neighbours)
