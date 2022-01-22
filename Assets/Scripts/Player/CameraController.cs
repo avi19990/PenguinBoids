@@ -10,6 +10,8 @@ namespace Player
         private List<CinemachineVirtualCamera> cameras;
 
         private int currentIndex;
+        
+        public Vector3 CameraForward => Vector3.ProjectOnPlane(cameras[currentIndex].transform.forward, Vector3.up).normalized;
 
         private void Start()
         {

@@ -6,7 +6,7 @@ namespace Fish
     public class Fish : MonoBehaviour
     {
         private float timer;
-        private float livingTime = 6f;
+        private float livingTime = 20f;
 
         private const string BoidTag = "Boid";
 
