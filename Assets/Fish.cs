@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Fish : MonoBehaviour
@@ -9,11 +8,16 @@ public class Fish : MonoBehaviour
     private void Start()
     {
         transform.parent = null;
+        GameDataHolder.FishAmount++;
     }
 
     private void Update()
     {
-        if (HasDied()) Destroy(gameObject);
+        if (HasDied())
+        {
+            GameDataHolder.FishAmount--;
+            Destroy(gameObject);
+        }
         CountUpTimer();
     }
 

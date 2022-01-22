@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
 
 namespace Boids
@@ -112,7 +109,25 @@ namespace Boids
                    Separation(boid, neighbours) * config.separationPriority + 
                    Avoidance(boid) * config.avoidancePriority + 
                    AvoidanceObstacle(boid) * config.avoidancePriority + 
-                   Center(boid) * config.centerPriority;
+                   Center(boid) * config.centerPriority + 
+                   FoodSearching(boid) * (FoodSearching(boid) == Vector3.zero ? 0: config.bonusPriority);
+        }
+
+        private Vector3 FoodSearching(Boid boid)
+        {
+            if (GameDataHolder.FishAmount == 0)
+            {
+                return Vector3.zero;
+            }
+
+            List<Fish> fishes = FindObjectsOfType<Fish>().ToList().Where(fish =>
+                IsBoidCloseEnough(boid, config.bonusRadius, fish.transform.position)).OrderBy(fish => Vector3.Distance(boid.transform.position, fish.transform.position)).ToList();
+            if (fishes == null || fishes.Count == 0)
+            {
+                return Vector3.zero;
+            }
+
+            return fishes[0].transform.position;
         }
 
         private Vector3 Cohesion(Boid boid, List<NeighbourData> neighbours)

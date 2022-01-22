@@ -1,8 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+
+public static class GameDataHolder
+{
+    public static int FishAmount;
+}
 
 public class FishThrower : MonoBehaviour
 {
@@ -10,14 +12,30 @@ public class FishThrower : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (HasInput())
         {
-            Transform appearingSpot = transform;
-            appearingSpot.position += transform.forward;
-            Fish fish = Instantiate(fishPrefab, appearingSpot);
-            Vector3 endPosition = appearingSpot.position + transform.forward * 4;
-            endPosition.y -= 5;
-            fish.transform.DOMove(endPosition, 1f);
+            InstantiateFish();
         }
+    }
+
+    private static bool HasInput()
+    {
+        return Input.GetKeyDown(KeyCode.Q);
+    }
+
+    private void InstantiateFish()
+    {
+        Transform appearingSpot = transform;
+        appearingSpot.position += transform.forward;
+        Fish fish = Instantiate(fishPrefab, appearingSpot);
+        Vector3 endPosition = GetEndPosition(appearingSpot);
+        fish.transform.DOMove(endPosition, 1f);
+    }
+
+    private Vector3 GetEndPosition(Transform appearingSpot)
+    {
+        Vector3 endPosition = appearingSpot.position + transform.forward * 4;
+        endPosition.y -= 5;
+        return endPosition;
     }
 }
