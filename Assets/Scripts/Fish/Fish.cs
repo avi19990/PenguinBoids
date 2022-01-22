@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Fish
@@ -6,6 +7,16 @@ namespace Fish
     {
         private float timer;
         private float livingTime = 6f;
+
+        private const string BoidTag = "Boid";
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag(BoidTag))
+            {
+                Destroy(gameObject);
+            }
+        }
 
         private void Start()
         {
