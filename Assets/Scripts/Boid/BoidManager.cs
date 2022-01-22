@@ -81,6 +81,8 @@ namespace Boids
                 predator.velocity = Vector3.ClampMagnitude(predator.velocity, config.maxVelocity);
 
                 predator.transform.position += predator.velocity * Time.deltaTime;
+                predator.transform.rotation = Quaternion.LookRotation(predator.velocity);
+                predator.transform.rotation = Quaternion.Euler(new Vector3(0.0f, predator.transform.rotation.eulerAngles.y, 0.0f));
             }
 
             spatialHash.AssignBoids(boids);
@@ -99,6 +101,8 @@ namespace Boids
                 boid.velocity = Vector3.ClampMagnitude(boid.velocity, config.maxVelocity);
 
                 boid.transform.position += boid.velocity * Time.deltaTime;
+                boid.transform.rotation = Quaternion.LookRotation(boid.velocity);
+                boid.transform.rotation = Quaternion.Euler(new Vector3(0.0f, boid.transform.rotation.eulerAngles.y, 0.0f));
             }
 
             spatialHash.ClearCells();
