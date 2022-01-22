@@ -87,6 +87,7 @@ namespace Boids
 
                 Vector3 acceleration = Combined(boid, neighbours);
                 acceleration = Vector3.ClampMagnitude(acceleration, config.maxAcceleration);
+                acceleration.y = 0;
 
                 boid.velocity += acceleration * Time.deltaTime;
                 boid.velocity = Vector3.ClampMagnitude(boid.velocity, config.maxVelocity);
