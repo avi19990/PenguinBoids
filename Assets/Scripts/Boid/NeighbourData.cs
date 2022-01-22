@@ -1,4 +1,4 @@
-namespace Boids
+namespace Boid
 {
     public class NeighbourData
     {

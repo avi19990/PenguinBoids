@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Fish;
 using UnityEngine;
 
-namespace Boids
+namespace Boid
 {
     public class BoidManager : MonoBehaviour
     {
@@ -120,7 +121,7 @@ namespace Boids
                 return Vector3.zero;
             }
 
-            List<Fish> fishes = FindObjectsOfType<Fish>().ToList().Where(fish =>
+            List<Fish.Fish> fishes = FindObjectsOfType<Fish.Fish>().ToList().Where(fish =>
                 IsBoidCloseEnough(boid, config.bonusRadius, fish.transform.position)).OrderBy(fish => Vector3.Distance(boid.transform.position, fish.transform.position)).ToList();
             if (fishes == null || fishes.Count == 0)
             {

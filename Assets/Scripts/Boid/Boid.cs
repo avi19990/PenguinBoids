@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Boids
+namespace Boid
 {
     public class Boid
     {

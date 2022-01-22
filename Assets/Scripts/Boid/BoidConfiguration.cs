@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Boids
+namespace Boid
 {
     [CreateAssetMenu(menuName = "Boid/Configuration")]
     public class BoidConfiguration : ScriptableObject
