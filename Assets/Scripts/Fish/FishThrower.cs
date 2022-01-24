@@ -38,7 +38,6 @@ namespace Fish
         private void InstantiateFish()
         {
             Transform appearingSpot = transform;
-            appearingSpot.position += cameraForward * 2;
             Fish fish = Instantiate(fishPrefab, appearingSpot);
             Vector3 endPosition = GetEndPosition(appearingSpot);
             fish.transform.DOMove(endPosition, 1f);

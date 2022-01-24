@@ -5,13 +5,20 @@ using UnityEngine;
 
 namespace Player
 {
+    public enum CameraType
+    {
+        TopDown,
+        FirstPerson
+    }
     public class CameraController : MonoBehaviour
     {
         private List<CinemachineVirtualCamera> cameras;
-
-        private int currentIndex;
+        [SerializeField] private GameObject playerMesh;
         
-        public Vector3 CameraForward => Vector3.ProjectOnPlane(cameras[currentIndex].transform.forward, Vector3.up).normalized;
+
+        private CameraType currentIndex;
+        
+        public Vector3 CameraForward => Vector3.ProjectOnPlane(cameras[(int)currentIndex].transform.forward, Vector3.up).normalized;
 
         private void Start()
         {
@@ -26,7 +33,13 @@ namespace Player
 
             SwitchCamera();
             IncreaseIndex();
+            SwitchPlayerMesh();
             SwitchCamera(true);
+        }
+
+        private void SwitchPlayerMesh()
+        {
+            playerMesh.SetActive(currentIndex == CameraType.TopDown);
         }
 
         private static bool HasInput()
@@ -41,12 +54,12 @@ namespace Player
 
         private void SwitchCamera(bool shouldEnable = false)
         {
-            cameras[currentIndex].gameObject.SetActive(shouldEnable);
+            cameras[(int)currentIndex].gameObject.SetActive(shouldEnable);
         }
 
         private void IncreaseIndex()
         {
-            currentIndex = (currentIndex + 1) % cameras.Count;
+            currentIndex = (CameraType)((int)(currentIndex + 1) % cameras.Count);
         }
 
         private void GetReferences()

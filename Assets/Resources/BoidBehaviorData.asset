@@ -27,4 +27,4 @@ MonoBehaviour:
   centerPriority: 1000
   wanderPriority: 90
   bonusRadius: 10
-  bonusPriority: 150
+  bonusPriority: 600
