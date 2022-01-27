@@ -104,7 +104,7 @@ namespace Boid
         {
             return Wander(boid) * config.wanderPriority 
                    + Center(boid) * config.centerPriority 
-                   + AvoidanceObstacle(boid) * config.avoidancePriority;
+                   + AvoidanceObstacle(boid) * config.obstacleAvoidancePriority;
         }
 
         private Vector3 Combined(Boid boid, List<NeighbourData> neighbours)
@@ -113,7 +113,7 @@ namespace Boid
                    Alignment(boid, neighbours) * config.alignmentPriority + 
                    Separation(boid, neighbours) * config.separationPriority + 
                    Avoidance(boid) * config.avoidancePriority + 
-                   AvoidanceObstacle(boid) * config.avoidancePriority + 
+                   AvoidanceObstacle(boid) * config.obstacleAvoidancePriority + 
                    Center(boid) * config.centerPriority + 
                    FoodSearching(boid) * (FoodSearching(boid) == Vector3.zero ? 0: config.bonusPriority);
         }
@@ -230,7 +230,7 @@ namespace Boid
         private Vector3 AvoidanceObstacle(Boid boid)
         {
             Vector3 avoidVector = new Vector3();
-            List<GameObject> obstacles = GetClosesObstacles(boid, config.avoidanceRadius);
+            List<GameObject> obstacles = GetClosesObstacles(boid, config.obstacleAvoidanceRadius);
             
             obstacles.ForEach(obstacle => avoidVector += RunAway(boid, obstacle.transform.position));
 

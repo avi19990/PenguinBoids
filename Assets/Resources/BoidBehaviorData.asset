@@ -25,6 +25,8 @@ MonoBehaviour:
   avoidancePriority: 700
   centerRadius: 40
   centerPriority: 1000
+  obstacleAvoidancePriority: 20
+  obstacleAvoidanceRadius: 600
   wanderPriority: 90
-  bonusRadius: 30
-  bonusPriority: 700
+  bonusRadius: 40
+  bonusPriority: 1000

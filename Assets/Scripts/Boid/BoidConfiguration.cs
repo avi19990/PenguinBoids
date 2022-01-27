@@ -40,11 +40,15 @@ namespace Boid
         [SerializeField]
         public float centerPriority;
         
+        [SerializeField] public float obstacleAvoidancePriority;
+        [SerializeField] public float obstacleAvoidanceRadius;
+        
         [SerializeField]
         public float wanderPriority;
 
         [SerializeField] public float bonusRadius;
         [SerializeField] public float bonusPriority;
+        
         
         
     }
