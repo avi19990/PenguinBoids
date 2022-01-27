@@ -11,11 +11,6 @@ namespace Player
         private Vector2 input;
         private Vector3 movingDirection;
 
-        private void Start()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-
         private void Update()
         {
             GetInput();
