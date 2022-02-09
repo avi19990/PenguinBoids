@@ -132,7 +132,7 @@ namespace Boid
                 return Vector3.zero;
             }
 
-            return fishes[0].transform.position;
+            return fishes[0].transform.position - boid.transform.position;
         }
 
         private Vector3 Cohesion(Boid boid, List<NeighbourData> neighbours)
